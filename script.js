@@ -3,7 +3,8 @@ let _username = "";
 function signUp() {
 	const username = document.querySelector("#username").value;
 	const picture = document.querySelector("#picture").value;
-
+	const sendTweet = document.getElementById("send-tweet")
+	document.getElementById("tweet").addEventListener("keypress", (event) => {if (event.key === "Enter") sendTweet.click()})
 	axios
 		.post("http://localhost:5000/sign-up", {
 			username,
@@ -18,7 +19,6 @@ function signUp() {
 			alert("Erro ao fazer cadastro! Consulte os logs.");
 		});
 }
-
 function loadTweets() {
 	axios.get("http://localhost:5000/tweets").then((res) => {
 		const tweets = res.data;
@@ -47,7 +47,6 @@ function loadTweets() {
 		document.querySelector(".tweets-page").classList.remove("hidden");
 	});
 }
-
 function postTweet() {
 	const tweet = document.querySelector("#tweet").value;
 
@@ -65,7 +64,6 @@ function postTweet() {
 			alert("Erro ao fazer tweet! Consulte os logs.");
 		});
 }
-
 function escapeHtml(unsafe) {
 	return unsafe
 		.replace(/&/g, "&amp;")

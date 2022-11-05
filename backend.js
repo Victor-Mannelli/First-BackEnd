@@ -5,11 +5,6 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-let currentUserInfo = {
-    setUserName: "",
-    setUserAvatar: ""
-}
-let currentTweet = "";
 let usersList = [
 	{
 		username: "bobesponja",
@@ -20,7 +15,7 @@ let usersList = [
 let tweetsArray = [
 	{
 		username: "bobesponja",
-		tweet: "eu amo o hub",
+		tweet: "1",
 	},
 ];
 // `${}`
@@ -36,18 +31,14 @@ app.post("/sign-up", (req, res) => {
 	// } else {
 	//     res.send("O nome de usuário deve ter de 3 a 15 caracteres, incluindo apenas letras, numeros e _")
 	// }
-
 	// app.send({message: "O nome de usuário e avatar foram salvos"})
+
 	if (username && avatar) {
 		usersList.push({
 			username,
 			avatar,
 		});
-        currentUserInfo = {
-            setUsername: username,
-			setAvatar: avatar,
-        }
-		res.send("OK");
+		res.send({ message: "Usuário registrado com sucesso" });
 	} else {
 		res.send({ message: "O nome de usuário e avatar devem ser preenchidos" });
 	}
@@ -60,20 +51,25 @@ app.post("/tweets", (req, res) => {
 			username,
 			tweet,
 		});
-        currentTweet = tweet;
-		res.send("OK");
+		res.send({ message: "Tweet enviado com sucesso" });
 	} else {
 		res.send({ message: "O nome de usuário e o tweet devem ser preenchidos" });
 	}
 });
 app.get("/tweets", (req, res) => {
-	res.send([
-        {
-            username: currentUserInfo.setUserName,
-            avatar: currentUserInfo.setUserAvatar,
-            tweet: currentTweet
-        }
-    ]);
+	let allTweets = tweetsArray.map((e, i) => {
+		return {
+			username: e.username,
+			avatar: usersList.find((user) => user.username === e.username).avatar,
+			tweet: e.tweet,
+		};
+	});
+    if (tweetsArray.length < 10){
+        res.send(allTweets.reverse());
+    } else {
+        let a = allTweets.slice(Math.max(allTweets.length - 10, 1))
+        res.send(a.reverse())
+    }
 });
 
 app.listen(5000);

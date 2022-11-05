@@ -52,7 +52,7 @@ h1 {
   color: #B6B6B6;
 }
 
-.pagina-inicial {
+.pagina-inicial, .tweets-page {
   min-height: 100vh;
 }
 
