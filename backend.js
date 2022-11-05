@@ -5,6 +5,11 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
+let currentUserInfo = {
+    setUserName: "",
+    setUserAvatar: ""
+}
+let currentTweet = "";
 let usersList = [
 	{
 		username: "bobesponja",
@@ -38,6 +43,10 @@ app.post("/sign-up", (req, res) => {
 			username,
 			avatar,
 		});
+        currentUserInfo = {
+            setUsername: username,
+			setAvatar: avatar,
+        }
 		res.send("OK");
 	} else {
 		res.send({ message: "O nome de usuário e avatar devem ser preenchidos" });
@@ -51,10 +60,20 @@ app.post("/tweets", (req, res) => {
 			username,
 			tweet,
 		});
+        currentTweet = tweet;
 		res.send("OK");
 	} else {
 		res.send({ message: "O nome de usuário e o tweet devem ser preenchidos" });
 	}
+});
+app.get("/tweets", (req, res) => {
+	res.send([
+        {
+            username: currentUserInfo.setUserName,
+            avatar: currentUserInfo.setUserAvatar,
+            tweet: currentTweet
+        }
+    ]);
 });
 
 app.listen(5000);
